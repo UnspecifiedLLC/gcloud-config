@@ -1,10 +1,6 @@
 sudo: false
 language: generic
 
-cache:
-  directories:
-    - "$HOME/google-cloud-sdk/"
-
 services:
   - docker
 
@@ -24,27 +20,13 @@ script:
   docker run -it --rm \
     --mount source=config-gcloud,target=/root/.config/gcloud \
     gcr.io/un-cloud-builders/gcloud-config:${COMMIT_TAG}
-  # run tests
   docker images
-    # - docker volume create tmp-vol
-    # - there should be multiple GCR service keys, to test authentication:
-    #   - read-only / minimal access to project
-    #   - well formed key with no access to project
-    #   - bogus key
-
   ls -al /var/run/docker.sock
-  # if pass, push the image to:
-  # master:
   docker run -it --rm \
     --mount source=gcloud,target=/root/.config/gcloud \
+    -e GCLOUD_SERVICE_KEY=${GCLOUD_SERVICE_KEY=} \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -gcr.io/cloud-builders/docker images
-  #   unspecified/cloud-builders-gcloud-config:latest
-  #   gcr.io/un-cloud-builders/build-config:latest
-  # tag:
-  #   unspecified/cloud-builders-gcloud-config:<tag>
-  #   gcr.io/un-cloud-builders/build-config:<tag>
-  # other:
 
 after_script:
   docker volume rm config-gcloud
