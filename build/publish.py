@@ -22,12 +22,12 @@ def isPullRequest():
     val = os.getenv('TRAVIS_PULL_REQUEST', 'NOT SET')
     return val != 'NOT SET'
 
+
+dump_env()
 if (isMaster()):
     print("publish as :latest")
-
 if (isTag()):
     print("publish as " + os.getenv('TRAVIS_TAG'))
-
 if (isPullRequest()):
     print("publish as " + os.getenv('TRAVIS_PULL_REQUEST_BRANCH'))
 
