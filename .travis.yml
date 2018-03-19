@@ -21,12 +21,11 @@ script:
     --mount source=config-gcloud,target=/root/.config/gcloud
     -e GCLOUD_SERVICE_KEY=${GCLOUD_SERVICE_KEY=}
     gcr.io/un-cloud-builders/gcloud-config:${COMMIT_TAG}
-  - docker images
-  - ls -al /var/run/docker.sock
   - docker run -it --rm
     --mount source=config-gcloud,target=/root/.config/gcloud
     -v /var/run/docker.sock:/var/run/docker.sock
     gcr.io/cloud-builders/docker images
+  - python build/publish.py
 
 after_script:
   - docker volume rm config-gcloud
