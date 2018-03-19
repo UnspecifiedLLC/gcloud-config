@@ -26,7 +26,7 @@ script:
   - docker run -it --rm
     --mount source=config-gcloud,target=/root/.config/gcloud
     -v /var/run/docker.sock:/var/run/docker.sock
-    -gcr.io/cloud-builders/docker images
+    gcr.io/cloud-builders/docker images
 
 after_script:
   - docker volume rm config-gcloud
