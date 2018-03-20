@@ -30,3 +30,13 @@ docker run -it --rm --mount source=gcloud,target=/root/.config/gcloud gcr.io/un-
 
 after_script:
   docker volume rm config-gcloud
+
+
+Location of key file after config:
+/root/.config/gcloud/legacy_credentials/un-cloud-builders-sa@un-cloud-builders.iam.gserviceaccount.com
+
+File listing the default gcloud account:
+~/.config/gcloud# cat configurations/config_default
+
+location of key file using 'account' from config_default:
+/root/.config/gcloud/legacy_credentials/${account}

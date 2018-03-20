@@ -21,11 +21,19 @@ script:
     --mount source=config-gcloud,target=/root/.config/gcloud
     -e GCLOUD_SERVICE_KEY=${GCLOUD_SERVICE_KEY=}
     gcr.io/un-cloud-builders/gcloud-config:${COMMIT_TAG}
-  - docker run -it --rm
+
+  - docker run -itd --rm
+    --name docker-client
     --mount source=config-gcloud,target=/root/.config/gcloud
     -v /var/run/docker.sock:/var/run/docker.sock
-    gcr.io/cloud-builders/docker images
-  - python build/publish.py
+    --entrypoint /bin/sleep
+    gcr.io/cloud-builders/docker
+
+  - docker exec -it docker-client /root/.config/gcloud/gcloud-config/scripts/shared/gcr_docker_login.bash
+  - docker exec -it docker-client /root/.config/gcloud/gcloud-config/scripts/shared/dockerhub_login.bash
+
+  - python build/publish.py gcr.io/un-cloud-builders/gcloud-config ${COMMIT_TAG} unspecified/cloud-builders-gcloud-config
 
 after_script:
+  - docker rm --force docker-client
   - docker volume rm config-gcloud

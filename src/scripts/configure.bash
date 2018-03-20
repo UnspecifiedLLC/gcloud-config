@@ -44,4 +44,7 @@ EOF
 
 [[ -z "$active_account" ]] && funct_usage
 echo "Active account: $active_account"
-
+scripts_target=/root/.config/gcloud/gcloud-config/scripts
+rm -dR ${scripts_target}
+mkdir -p ${scripts_target}
+mv /builder/gcloud-config/scripts/shared ${scripts_target}
