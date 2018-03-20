@@ -7,6 +7,7 @@ services:
 env:
   global:
     - BASENAME=GCLOUD-CONFIG
+    - COMMIT_TAG=${TRAVIS_COMMIT::6}
 
 before_install:
 
