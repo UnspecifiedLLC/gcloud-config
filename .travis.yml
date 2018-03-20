@@ -12,7 +12,6 @@ env:
 before_install:
 
 install:
-  - docker pull gcr.io/cloud-builders/docker
   - docker pull gcr.io/cloud-builders/gcloud
   - docker volume create config-gcloud
 
