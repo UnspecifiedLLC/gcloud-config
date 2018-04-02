@@ -1,8 +1,6 @@
 sudo: false
-language: generic
-
-services:
-  - docker
+language: minimal
+services: docker
 
 env:
   global:
