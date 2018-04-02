@@ -6,25 +6,22 @@ services:
 
 env:
   global:
-    - BASENAME=GCLOUD-CONFIG
-    - COMMIT_TAG=${TRAVIS_COMMIT::6}
 
 before_install:
+  - docker pull gcr.io/cloud-builders/gcloud:latest
+  - docker pull unspecifiedllc/gcloud-config:latest
 
 install:
-  - docker pull gcr.io/cloud-builders/gcloud
-  - docker volume create config-gcloud
+  - docker volume create activated_service-account
+  - docker run -it --rm
+    --mount source=activated_service-account,target=/root/.config/gcloud
+    -e GCLOUD_SERVICE_KEY=${GCLOUD_SERVICE_KEY}
+    unspecifiedllc/gcloud-config:latest
 
 script:
-  - docker build -t gcr.io/un-cloud-builders/gcloud-config:${COMMIT_TAG} .
   - docker run -it --rm
-    --mount source=config-gcloud,target=/root/.config/gcloud
-    -e GCLOUD_SERVICE_KEY=${GCLOUD_SERVICE_KEY}
-    gcr.io/un-cloud-builders/gcloud-config:${COMMIT_TAG}
-
-  - docker run -it --rm
-    --mount source=config-gcloud,target=/root/.config/gcloud
-    gcr.io/cloud-builders/gcloud auth list
+    --mount source=activated_service-account,target=/root/.config/gcloud
+    gcr.io/cloud-builders/gcloud:latest auth list
 
 after_script:
-  - docker volume rm config-gcloud
+  - docker volume rm activated_service-account
